@@ -1,0 +1,29 @@
+---
+import { Icon } from 'astro-icon/components';
+const socialMedia = [
+  {
+    icon: 'icon-facebook',
+    url: '#'
+  },
+  {
+    icon: 'icon-twitter',
+    url: '#'
+  },
+  {
+    icon: 'icon-pinterest',
+    url: '#'
+  },
+  {
+    icon: 'icon-instagram',
+    url: '#'
+  },
+]
+---
+
+<div class="flex gap-5">
+  {socialMedia.map(element =>
+    <a href={element.url}>
+      <Icon name={element.icon} class="size-5" />
+    </a>
+  )}
+</div>

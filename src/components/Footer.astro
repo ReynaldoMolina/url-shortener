@@ -1,0 +1,78 @@
+---
+import { Icon } from 'astro-icon/components';
+import SocialMedia from './SocialMedia.astro';
+const footerLinks = [
+  {
+    category: 'Features',
+    links: [
+      {
+        name: 'Link Shortening',
+        url: '#'
+      },
+      {
+        name: 'Branded Links',
+        url: '#'
+      },
+      {
+        name: 'Analytics',
+        url: '#'
+      },
+    ]
+  },
+  {
+    category: 'Resources',
+    links: [
+      {
+        name: 'Blog',
+        url: '#'
+      },
+      {
+        name: 'Developers',
+        url: '#'
+      },
+      {
+        name: 'Support',
+        url: '#'
+      },
+    ]
+  },
+  {
+    category: 'Company',
+    links: [
+      {
+        name: 'About',
+        url: '#'
+      },
+      {
+        name: 'Our Team',
+        url: '#'
+      },
+      {
+        name: 'Careers',
+        url: '#'
+      },
+      {
+        name: 'Contact',
+        url: '#'
+      },
+    ]
+  },
+];
+---
+
+<footer class="flex gap-10 flex-col items-center w-full bg-gray-900 p-15">
+  <Icon name="logo" class="size-25 text-neutral-200" />
+
+  {footerLinks.map(element =>
+    <div class="flex flex-col items-center gap-5">
+      <p class="text-neutral-200 font-bold">{element.category}</p>
+      <div class="flex flex-col items-center gap-2">
+        {element.links.map(e =>
+          <a href={e.url} class="text-neutral-400">{e.name}</a>
+        )}
+      </div>
+    </div>
+  )}
+
+  <SocialMedia />
+</footer>
