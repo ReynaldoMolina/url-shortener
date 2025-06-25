@@ -18,5 +18,8 @@ export default defineConfig({
     ]
   },
 
-  integrations: [icon(), react()]
+  integrations: [icon(), react()],
+
+  site: 'https://reynaldomolina.github.io',
+  base: 'url-shortener'
 });
