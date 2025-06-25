@@ -3,9 +3,13 @@ import { Icon } from 'astro-icon/components';
 import GetStarted from './GetStarted.astro';
 ---
 
-<section class="flex gap-7 flex-col items-center px-5">
-  <Icon name="illustration-working" class="size-full" />
-  <h1 class="text-neutral-700 text-4xl text-center font-bold">More than just shorter links</h1>
-  <p class="text-neutral-400 text-center text-lg">Build your brand's recognition and get detailed insights on how your links are performing.</p>
-  <GetStarted />
+<section class="flex gap-5 flex-col md:flex-row items-center justify-center md:mt-5 md:mb-22 max-w-5xl w-full mx-auto">
+  <div class="w-full md:w-[55%] overflow-hidden xl:overflow-visible pl-7 md:pl-0 md:order-2">
+    <Icon name="illustration-working" class="w-[142%] md:w-[120%] lg:w-full h-auto" />
+  </div>
+  <div class="flex md:w-[45%] gap-4 md:gap-2 flex-col items-center md:items-start px-7 md:pr-0 mt-5 mb-22 md:mt-0 md:mb-0">
+    <h1 class="text-very-dark-blue text-5xl md:text-5xl text-center md:text-left font-bold">More than just shorter links</h1>
+    <p class="text-grayish-violet text-center text-xl md:text-sm mb-4 md:text-left md:w-[90%]">Build your brand's recognition and get detailed insights on how your links are performing.</p>
+    <GetStarted />
+  </div>
 </section>

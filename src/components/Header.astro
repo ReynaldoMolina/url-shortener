@@ -1,8 +1,21 @@
 ---
 import { Icon } from 'astro-icon/components';
+import MenuToggle from '../components/MobileMenu';
+import { headerLinks } from './links';
 ---
 
-<header class="flex items-center justify-between px-5">
-  <Icon name="logo" class="size-30 text-[#34313D]" />
-  <Icon name="menu" class="size-10" />
+<header class="flex items-center justify-between p-7 max-w-5xl w-full mx-auto">
+  <div class="flex items-center md:gap-10">
+    <Icon name="logo" class="w-30 md:w-20 h-auto text-very-dark-violet" />
+    <nav class="hidden md:flex gap-8">
+      {headerLinks.map(link => 
+        <a href={link.url} class="text-grayish-violet hover:text-very-dark-violet font-semibold transition">{link.title}</a>
+      )}
+    </nav>
+  </div>
+  <div class="hidden md:flex gap-3">
+    <a href="#" class="rounded-full py-3 px-7 text-grayish-violet hover:text-very-dark-violet font-semibold transition">Login</a>
+    <a href="#" class="rounded-full py-3 px-7 bg-cyan-brand text-white font-bold hover:bg-cyan-hover transition">Sign Up</a>
+  </div>
+  <MenuToggle client:load />
 </header>

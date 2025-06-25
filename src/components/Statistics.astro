@@ -5,33 +5,38 @@ const statistics = [
     name: 'Brand recognition',
     description: "Boost your brand recognition with each click. Generic links don't mean a thing. Branded links help instil confidence in your content.",
     icon: 'icon-brand-recognition',
+    margin: 'lg:mb-20'
   },
   {
     name: 'Detailed Records',
     description: "Gain insights into who is clicking your links. Knowing when and where people engage with your content helps inform better decisions.",
     icon: 'icon-detailed-records',
+    margin: ''
   },
   {
     name: 'Fully Customizable',
     description: "Improve brand awareness and content discoverability through customizable links, supercharging audience engagement.",
     icon: 'icon-fully-customizable',
+    margin: 'lg:mt-20'
   },
 ];
 ---
 
-<section class="flex gap-7 flex-col items-center p-5 bg-gray-100">
-  <h2 class="text-neutral-700 text-2xl text-center font-bold mt-10">Advanced Statistics</h2>
-  <p class="text-neutral-400 text-center text-md">Track how your links are performing across the web with our advanced statistics dashboard.</p>
+<section class="flex gap-6 flex-col items-center p-7 py-20 bg-gray-section">
+  <h2 class="text-very-dark-violet text-3xl text-center font-bold mt-10">Advanced Statistics</h2>
+  <p class="text-grayish-violet text-center text-lg max-w-md">Track how your links are performing across the web with our advanced statistics dashboard.</p>
 
-  <div class="flex relative flex-col items-center gap-20 mt-15">
-    <div class="w-2 h-full absolute bg-cyan-500"></div>
+  <div class="flex relative flex-col lg:flex-row items-center gap-20 lg:gap-5 mt-15 max-w-5xl w-full mx-auto">
+
+    <div class="w-2 lg:w-full h-full lg:h-2 absolute bg-cyan-brand"></div>
+
     {statistics.map(element => 
-      <div class="flex gap-5 relative flex-col items-center justify-center bg-white px-9 pb-9 pt-15 rounded-md w-full">
-        <div class="flex flex-col absolute top-0 translate-y-[-50%] items-center justify-center size-20 rounded-full bg-violet-950">
-          <Icon name={element.icon} class="size-9" />
+      <div class={`flex gap-5 lg:gap-3 relative flex-col items-center justify-center bg-white px-9 lg:px-7 pb-10 lg:pb-7 pt-18 lg:pt-15 rounded-lg w-full shadow-xs max-w-xl ${element.margin}`}>
+        <div class="flex flex-col absolute top-0 translate-y-[-50%] lg:translate-x-[-120%] items-center justify-center size-20 lg:size-17 rounded-full bg-violet-brand">
+          <Icon name={element.icon} class="size-9 lg:size-7" />
         </div>
-        <h3 class="text-neutral-700 text-2xl text-center font-bold">{element.name}</h3>
-        <p class="text-neutral-400 text-center text-md">{element.description}</p>
+        <h3 class="text-very-dark-violet text-2xl w-full text-center font-bold lg:text-lg lg:text-left">{element.name}</h3>
+        <p class="text-grayish-violet text-center text-lg lg:text-sm w-full lg:text-left">{element.description}</p>
       </div>
     )}
   </div>

@@ -60,19 +60,25 @@ const footerLinks = [
 ];
 ---
 
-<footer class="flex gap-10 flex-col items-center w-full bg-gray-900 p-15">
-  <Icon name="logo" class="size-25 text-neutral-200" />
+<footer class="bg-very-dark-violet p-13 w-full">
+  <div class="max-w-5xl mx-auto w-full flex gap-10 flex-col items-center md:flex-row md:items-start md:justify-between">
+    <Icon name="logo" class="min-w-35 md:min-w-25 h-auto text-neutral-200" />
 
-  {footerLinks.map(element =>
-    <div class="flex flex-col items-center gap-5">
-      <p class="text-neutral-200 font-bold">{element.category}</p>
-      <div class="flex flex-col items-center gap-2">
-        {element.links.map(e =>
-          <a href={e.url} class="text-neutral-400">{e.name}</a>
+    <div class="flex flex-col md:flex-row gap-10">
+      <div class="flex flex-col md:flex-row gap-10">
+        {footerLinks.map(element =>
+          <div class="flex flex-col items-center md:items-start gap-5">
+            <p class="text-neutral-200 font-bold md:text-sm">{element.category}</p>
+            <div class="flex flex-col items-center md:items-start gap-2">
+              {element.links.map(e =>
+                <a href={e.url} class="text-grayish-violet md:text-sm hover:text-cyan-brand transition">{e.name}</a>
+              )}
+            </div>
+          </div>
         )}
       </div>
+    
+      <SocialMedia />
     </div>
-  )}
-
-  <SocialMedia />
+  </div>
 </footer>
