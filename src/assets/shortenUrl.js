@@ -1,10 +1,20 @@
 export async function shortenUrl(longUrl) {
+  const API_KEY = import.meta.env.PUBLIC_API_KEY;
+
   const endpoint =
-    'https://api.shrtco.de/v2/shorten?url=' + encodeURIComponent(longUrl);
+    `https://cutt.ly/api/api.php?key=${API_KEY}&short=${encodeURIComponent(longUrl)}`;
 
   const res = await fetch(endpoint);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
 
-  const { result } = await res.json();
-  return result.full_short_link;
+  const status = data.url.status;
+  if (status !== 7) {
+    throw new Error('Cutt.ly error code: ' + status);
+  }
+  
+  return {
+    long: data.url.fullLink,
+    short: data.url.shortLink,
+    title: data.url.title ?? ''
+  };
 }
