@@ -1,8 +1,8 @@
 export async function shortenUrl(longUrl) {
-  const API_KEY = import.meta.env.PUBLIC_API_KEY;
-
+  const apiKey =
+    import.meta.env.PROD ? import.meta.env.API_KEY : import.meta.env.PUBLIC_API_KEY;
   const endpoint =
-    `https://cutt.ly/api/api.php?key=${API_KEY}&short=${encodeURIComponent(longUrl)}`;
+    `https://cutt.ly/api/api.php?key=${apiKey}&short=${encodeURIComponent(longUrl)}`;
 
   const res = await fetch(endpoint);
   const data = await res.json();
@@ -14,7 +14,6 @@ export async function shortenUrl(longUrl) {
   
   return {
     long: data.url.fullLink,
-    short: data.url.shortLink,
-    title: data.url.title ?? ''
+    short: data.url.shortLink
   };
 }

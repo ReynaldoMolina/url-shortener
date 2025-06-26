@@ -20,6 +20,6 @@ export default defineConfig({
 
   integrations: [icon(), react()],
 
-  site: 'https://reynaldomolina.github.io',
-  base: 'url-shortener'
+  // site: 'https://reynaldomolina.github.io',
+  // base: 'url-shortener'
 });
