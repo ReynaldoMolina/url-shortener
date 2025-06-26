@@ -39,7 +39,7 @@ export function Shortener() {
     <section className="flex flex-col">
       <div className="px-6 bg-[linear-gradient(to_bottom,_white_0%,_white_50%,_#f0f1f6_50%,_#f0f1f6_100%)]">
         <form
-          className="flex flex-col md:flex-row gap-4 rounded-xl p-7 md:p-11 bg-[url(/url-shortener/bg-shorten-mobile.svg)] md:bg-[url(/url-shortener/bg-shorten-desktop.svg)] bg-size-[75%] md:bg-cover md:bg-center md:bg-fit bg-no-repeat bg-top-right bg-violet-brand max-w-5xl w-full mx-auto md:items-center"
+          className="flex flex-col md:flex-row gap-4 rounded-xl p-7 md:p-11 bg-[url(/bg-shorten-mobile.svg)] md:bg-[url(/bg-shorten-desktop.svg)] bg-size-[75%] md:bg-cover md:bg-center md:bg-fit bg-no-repeat bg-top-right bg-violet-brand max-w-5xl w-full mx-auto md:items-center"
           onSubmit={handleShorten}>
           <div className="flex flex-col gap-2 w-full md:relative">
             <input
