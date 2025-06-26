@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import MenuIcon from '../icons/menu.svg?react';
 import CloseIcon from '../icons/close.svg?react';
-import { headerLinks } from './links';
+import { headerLinks } from '../assets/links';
 
 export default function MenuToggle() {
   const [menuOpen, setMenuOpen] = useState(false);

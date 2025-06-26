@@ -1,33 +1,36 @@
 import { useState } from "react";
+// import { shortenUrl } from "../assets/shortenUrl";
 
 export function Shortener() {
   const [input, setInput] = useState({
-    text: '',
+    url: '',
     empty: false
   });
   const [showResult, setShowResult] = useState(false);
 
-  function handleShorten(e) {
+  async function handleShorten(e) {
     e.preventDefault();
-    if (input.text === '') {
+    if (input.url === '') {
       setInput({...input, empty: true});
       return;
     };
+    // const data = await shortenUrl(input.url)
+    // console.log(data);
     setShowResult(true);
   }
 
   const data = [
     {
       link: 'https://www.frontendmentor.io',
-      url: `https://rel.ink/${input.text.toLowerCase()}`
+      url: 'https://rel.ink/1'
     },
     {
       link: 'https://www.frontendmentor.io',
-      url: `https://rel.ink/${input.text.toLowerCase()}`
+      url: 'https://rel.ink/2'
     },
     {
       link: 'https://www.frontendmentor.io',
-      url: `https://rel.ink/${input.text.toLowerCase()}`
+      url: 'https://rel.ink/3'
     },
   ];
 
@@ -44,9 +47,9 @@ export function Shortener() {
               className={`py-3 px-4 bg-white rounded-lg w-full ${inputEmpty}`}
               placeholder="Shorten a link here..."
               onChange={(event) => {
-                const text = event.target.value;
-                const empty = text === '' ? true : false
-                setInput({text, empty});
+                const url = event.target.value;
+                const empty = url === '' ? true : false
+                setInput({url, empty});
               }}
               ></input>
             {input.empty && 
