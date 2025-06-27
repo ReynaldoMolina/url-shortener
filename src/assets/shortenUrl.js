@@ -1,7 +1,7 @@
 export async function shortenUrl(longUrl) {
   const production = import.meta.env.PROD;
   const apiKey = production ? import.meta.env.API_KEY : import.meta.env.PUBLIC_API_KEY;
-  const endpoint = "https://shortly-rm.vercel.app/shorten";
+  const endpoint = "https://shortly-rm.vercel.app/api/shorten";
 
   try {
     const res = await fetch(endpoint, {
