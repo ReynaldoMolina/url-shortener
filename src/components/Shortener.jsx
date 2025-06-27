@@ -1,34 +1,62 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { shortenUrl } from "../assets/shortenUrl";
 
 export function Shortener() {
   const [input, setInput] = useState({ url: '', empty: false });
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  async function handleShorten(e) {
-    e.preventDefault();
-
-    const url = input.url.trim();
-    if (url === '') {
-      setInput({...input, empty: true});
+  function handleData(newUrl) {
+    const isInList = data.some(e => e.shortId === newUrl.shortId);
+    if (isInList) {
+      setError('The URL already exists.');
       return;
     };
 
+    try {
+      const newList = [...data, newUrl];
+      localStorage.setItem("SHORTENED_LINKS", JSON.stringify(newList));
+      setData(newList);
+    } catch (error) {
+      console.error("Failed to write to localStorage:", error);
+    }
+  }
+
+  async function handleShorten(e) {
+    e.preventDefault();
+    const url = input.url.trim();
+    if (url === '') return setInput({...input, empty: true});
     setLoading(true);
     setError(null);
 
     try {
       const result = await shortenUrl(url);
-      setData(result);
-    } catch (err) {
-      console.error(err);
-      setError(err.message);
+      handleData(result);
+    } catch (error) {
+      console.error(error);
+      setError(error.message);
     } finally {
       setLoading(false);
     }
   }
+
+  function handleLoad() {
+    try {
+      const raw = localStorage.getItem("SHORTENED_LINKS");
+      if (!raw) return;
+
+      const loadedList = JSON.parse(raw); 
+
+      if (loadedList) setData(loadedList);
+    } catch (error) {
+      console.error("Failed to load from localStorage:", error);
+    }
+  }
+
+  useEffect(() => {
+    handleLoad();
+  }, []);
 
   const inputEmpty = input.empty ? 'text-red-brand outline-2 outline-red-brand' : 'text-very-dark-violet';
 
@@ -64,10 +92,8 @@ export function Shortener() {
           </button>
         </form>
       </div>
-
-      {data && !loading && !error && (
-        <UrlDiv data={data} />
-      )}
+      
+      <LinksList data={data} />
     </section>
   );
 }
@@ -89,16 +115,27 @@ function UrlDiv({ data }) {
   }
 
   return (
-    <section className="flex p-6 bg-gray-section">
-      <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-10 rounded-lg bg-white pb-5 md:px-6 md:py-4 max-w-5xl w-full mx-auto shadow-xs">
-        <p className="text-very-dark-violet px-4 md:px-0 py-3 md:py-0 border-b-1 md:border-b-0 border-b-neutral-200 md:w-full">{data.fullUrl}</p>
-        <a href={`https://${data.shortUrl}`} target="_blank" className="text-cyan-brand px-4 md:px-0 md:min-w-fit hover:underline">{data.shortUrl}</a>
-        <button
-          className={`rounded-lg mx-4 md:mx-0 font-bold text-white p-3 md:min-w-30 ${bgColor} cursor-pointer transition text-lg`}
-          onClick={handleCopy}>
-          {text}
-        </button>
-      </div>
+    <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-10 rounded-lg bg-white pb-5 md:px-6 md:py-2 max-w-5xl w-full mx-auto shadow-xs">
+      <p className="text-very-dark-violet px-4 md:px-0 py-3 md:py-0 border-b-1 md:border-b-0 border-b-neutral-200 md:w-full">{data.fullUrl}</p>
+      <a href={`https://${data.shortUrl}`} target="_blank" className="text-cyan-brand px-4 md:px-0 md:min-w-fit hover:underline">{data.shortUrl}</a>
+      <button
+        className={`rounded-lg mx-4 md:mx-0 font-bold text-white p-3 md:p-2 md:min-w-30 ${bgColor} cursor-pointer transition text-lg`}
+        onClick={handleCopy}>
+        {text}
+      </button>
+    </div>
+  );
+}
+
+function LinksList({ data }) {
+  const isEmpty = data.length === 0;
+  if (isEmpty) return;
+
+  return (
+    <section className="flex flex-col gap-3 p-6 bg-gray-section">
+      {data.map(url => 
+        <UrlDiv data={url} />
+      )}
     </section>
   );
 }
