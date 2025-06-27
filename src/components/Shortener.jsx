@@ -33,10 +33,10 @@ export function Shortener() {
   const inputEmpty = input.empty ? 'text-red-brand outline-2 outline-red-brand' : 'text-very-dark-violet';
 
   return (
-    <section className="flex flex-col">
+    <section className="flex flex-col" id="shorten">
       <div className="px-6 bg-[linear-gradient(to_bottom,_white_0%,_white_50%,_#f0f1f6_50%,_#f0f1f6_100%)]">
         <form
-          className="flex flex-col md:flex-row gap-4 rounded-xl p-7 md:p-11 bg-[url(/bg-shorten-mobile.svg)] md:bg-[url(/bg-shorten-desktop.svg)] bg-size-[75%] md:bg-cover md:bg-center md:bg-fit bg-no-repeat bg-top-right bg-violet-brand max-w-5xl w-full mx-auto md:items-center"
+          className="flex flex-col md:flex-row gap-4 rounded-xl p-7 md:p-11 bg-[url(/bg-shorten-mobile.svg)] md:bg-[url(/bg-shorten-desktop.svg)] bg-size-[75%] md:bg-cover md:bg-center md:bg-fit bg-no-repeat bg-top-right bg-violet-brand max-w-5xl w-full mx-auto md:items-center mt-15"
           onSubmit={handleShorten}>
           <div className="flex flex-col gap-2 w-full md:relative">
             <input
@@ -92,7 +92,7 @@ function UrlDiv({ data }) {
     <section className="flex p-6 bg-gray-section">
       <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-10 rounded-lg bg-white pb-5 md:px-6 md:py-4 max-w-5xl w-full mx-auto shadow-xs">
         <p className="text-very-dark-violet px-4 md:px-0 py-3 md:py-0 border-b-1 md:border-b-0 border-b-neutral-200 md:w-full">{data.fullUrl}</p>
-        <a href={data.shortUrl} target="_blank" className="text-cyan-brand px-4 md:px-0 md:min-w-fit hover:underline">{data.shortUrl}</a>
+        <a href={`https://${data.shortUrl}`} target="_blank" className="text-cyan-brand px-4 md:px-0 md:min-w-fit hover:underline">{data.shortUrl}</a>
         <button
           className={`rounded-lg mx-4 md:mx-0 font-bold text-white p-3 md:min-w-30 ${bgColor} cursor-pointer transition text-lg`}
           onClick={handleCopy}>
