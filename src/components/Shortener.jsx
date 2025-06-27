@@ -9,6 +9,7 @@ export function Shortener() {
 
   async function handleShorten(e) {
     e.preventDefault();
+
     const url = input.url.trim();
     if (url === '') {
       setInput({...input, empty: true});
@@ -27,10 +28,6 @@ export function Shortener() {
     } finally {
       setLoading(false);
     }
-
-    const data = await shortenUrl(input.url);
-    setData(data);
-    setShowResult(true);
   }
 
   const inputEmpty = input.empty ? 'text-red-brand outline-2 outline-red-brand' : 'text-very-dark-violet';
@@ -45,6 +42,7 @@ export function Shortener() {
             <input
               className={`py-3 px-4 bg-white rounded-lg w-full ${inputEmpty}`}
               placeholder="Shorten a link here..."
+              value={input.url}
               onChange={(event) => {
                 const url = event.target.value;
                 const empty = url === '' ? true : false
@@ -79,20 +77,28 @@ function UrlDiv({ data }) {
   const bgColor = copied ? 'bg-violet-brand' : 'bg-cyan-brand hover:bg-cyan-hover';
   const text = copied ? 'Copied!' : 'Copy';
 
-  function handleCopy() {
-    setCopied(state => !state);
-    setTimeout(() => setCopied(false), 3000);
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(data.shortUrl);
+      setCopied(state => !state);
+      setTimeout(() => setCopied(false), 3000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+      alert('Error copying to clipboard. Try again.');
+    }
   }
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-10 rounded-lg bg-white pb-5 md:px-6 md:py-4 max-w-5xl w-full mx-auto">
-      <p className="text-very-dark-violet px-4 md:px-0 py-3 md:py-0 border-b-1 md:border-b-0 border-b-neutral-200 md:w-full">{data.long}</p>
-      <p className="text-cyan-brand px-4 md:px-0 md:min-w-fit">{data.short}</p>
-      <button
-        className={`rounded-lg mx-4 md:mx-0 font-bold text-white p-3 md:min-w-30 ${bgColor} cursor-pointer transition text-lg`}
-        onClick={handleCopy}>
-        {text}
-      </button>
-    </div>
+    <section className="flex p-6 bg-gray-section">
+      <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-10 rounded-lg bg-white pb-5 md:px-6 md:py-4 max-w-5xl w-full mx-auto shadow-xs">
+        <p className="text-very-dark-violet px-4 md:px-0 py-3 md:py-0 border-b-1 md:border-b-0 border-b-neutral-200 md:w-full">{data.fullUrl}</p>
+        <a href={data.shortUrl} target="_blank" className="text-cyan-brand px-4 md:px-0 md:min-w-fit hover:underline">{data.shortUrl}</a>
+        <button
+          className={`rounded-lg mx-4 md:mx-0 font-bold text-white p-3 md:min-w-30 ${bgColor} cursor-pointer transition text-lg`}
+          onClick={handleCopy}>
+          {text}
+        </button>
+      </div>
+    </section>
   );
 }
