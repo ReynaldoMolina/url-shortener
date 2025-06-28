@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { shortenUrl } from "../assets/shortenUrl";
 
 export function Shortener() {
-  const [input, setInput] = useState({ url: '', empty: false });
+  const [input, setInput] = useState('');
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   function handleData(newUrl) {
-    const isInList = data.some(e => e.shortId === newUrl.shortId);
+    const isInList = data.some(e => e.shortUrl === newUrl.shortUrl);
     if (isInList) {
       setError('The URL already exists.');
       return;
@@ -25,8 +25,8 @@ export function Shortener() {
 
   async function handleShorten(e) {
     e.preventDefault();
-    const url = input.url.trim();
-    if (url === '') return setInput({...input, empty: true});
+    const url = input.trim();
+    if (url === '') return setError('Please add a link');
     setLoading(true);
     setError(null);
 
@@ -54,34 +54,40 @@ export function Shortener() {
     }
   }
 
+  function handleDelete(shortUrl) {
+    try {
+      const newList = data.filter(e => e.shortUrl !== shortUrl);
+      localStorage.setItem("SHORTENED_LINKS", JSON.stringify(newList));
+      setData(newList);
+    } catch (error) {
+      console.error("Failed to delete from localStorage:", error);
+    }
+  }
+
   useEffect(() => {
     handleLoad();
   }, []);
 
-  const inputEmpty = input.empty ? 'text-red-brand outline-2 outline-red-brand' : 'text-very-dark-violet';
+  const inputError = error ? 'text-red-brand outline-2 outline-red-brand' : 'text-very-dark-violet';
 
   return (
     <section className="flex flex-col" id="shorten">
-      <div className="px-6 bg-[linear-gradient(to_bottom,_white_0%,_white_50%,_#f0f1f6_50%,_#f0f1f6_100%)]">
+      <div className="px-6 bg-[linear-gradient(to_bottom,_white_0%,_white_50%,_#f0f1f6_50%,_#f0f1f6_100%)] mt-15">
         <form
-          className="flex flex-col md:flex-row gap-4 rounded-xl p-7 md:p-11 bg-[url(/bg-shorten-mobile.svg)] md:bg-[url(/bg-shorten-desktop.svg)] bg-size-[75%] md:bg-cover md:bg-center md:bg-fit bg-no-repeat bg-top-right bg-violet-brand max-w-5xl w-full mx-auto md:items-center mt-15"
+          className="flex flex-col md:flex-row gap-4 rounded-xl p-7 md:p-11 bg-[url(/bg-shorten-mobile.svg)] md:bg-[url(/bg-shorten-desktop.svg)] bg-size-[75%] md:bg-cover md:bg-center md:bg-fit bg-no-repeat bg-top-right bg-violet-brand max-w-5xl w-full mx-auto md:items-center"
           onSubmit={handleShorten}>
           <div className="flex flex-col gap-2 w-full md:relative">
             <input
-              className={`py-3 px-4 bg-white rounded-lg w-full ${inputEmpty}`}
+              className={`py-3 px-4 bg-white rounded-lg w-full ${inputError}`}
               placeholder="Shorten a link here..."
               value={input.url}
               onChange={(event) => {
-                const url = event.target.value;
-                const empty = url === '' ? true : false
-                setInput({url, empty});
+                if (error) setError(null);
+                setInput(event.target.value);
               }}
               ></input>
-            {(input.empty || error) && 
-              <p
-                className="text-red-400 text-sm italic md:absolute md:-bottom-7">
-                {error ? error : 'Please add a link'}
-              </p>
+            {error && 
+              <p className="text-red-400 text-sm italic md:absolute md:-bottom-7">{error}</p>
             }
           </div>
 
@@ -93,12 +99,12 @@ export function Shortener() {
         </form>
       </div>
       
-      <LinksList data={data} />
+      <LinksList data={data} handleDelete={handleDelete} />
     </section>
   );
 }
 
-function UrlDiv({ data }) {
+function UrlDiv({ data, handleDelete }) {
   const [copied, setCopied] = useState(false);
   const bgColor = copied ? 'bg-violet-brand' : 'bg-cyan-brand hover:bg-cyan-hover';
   const text = copied ? 'Copied!' : 'Copy';
@@ -115,26 +121,35 @@ function UrlDiv({ data }) {
   }
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-10 rounded-lg bg-white pb-5 md:px-6 md:py-2 max-w-5xl w-full mx-auto shadow-xs">
+    <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-5 rounded-lg bg-white pb-4 md:px-5 md:py-2 max-w-5xl w-full mx-auto shadow-xs">
       <p className="text-very-dark-violet px-4 md:px-0 py-3 md:py-0 border-b-1 md:border-b-0 border-b-neutral-200 md:w-full">{data.fullUrl}</p>
       <a href={`https://${data.shortUrl}`} target="_blank" className="text-cyan-brand px-4 md:px-0 md:min-w-fit hover:underline">{data.shortUrl}</a>
-      <button
-        className={`rounded-lg mx-4 md:mx-0 font-bold text-white p-3 md:p-2 md:min-w-30 ${bgColor} cursor-pointer transition text-lg`}
-        onClick={handleCopy}>
-        {text}
-      </button>
+      <div className="flex w-full md:w-fit gap-2 px-4 md:px-0 items-center">
+        <button
+          className={`rounded-lg font-bold text-white p-3 md:p-2 w-full md:min-w-20 md:w-20 ${bgColor} cursor-pointer transition text-sm`}
+          onClick={handleCopy}>
+          {text}
+        </button>
+        <button
+          className="rounded-lg font-bold text-white p-3 md:p-2 w-full md:min-w-20 md:w-20 bg-red-400 hover:bg-red-500 cursor-pointer transition text-sm"
+          onClick={() => handleDelete(data.shortUrl)}>
+          Delete
+        </button>
+      </div>
     </div>
   );
 }
 
-function LinksList({ data }) {
-  const isEmpty = data.length === 0;
-  if (isEmpty) return;
+function LinksList({ data, handleDelete }) {
+  if (data.length === 0) return;
 
   return (
     <section className="flex flex-col gap-3 p-6 bg-gray-section">
       {data.map(url => 
-        <UrlDiv data={url} />
+        <UrlDiv
+          key={url.shortUrl}
+          data={url}
+          handleDelete={handleDelete} />
       )}
     </section>
   );
