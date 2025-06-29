@@ -7,7 +7,7 @@ export function Shortener() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  function handleData(newUrl) {
+  function handleSave(newUrl) {
     const isInList = data.some(e => e.shortUrl === newUrl.shortUrl);
     if (isInList) {
       setError('The URL already exists.');
@@ -15,7 +15,7 @@ export function Shortener() {
     };
 
     try {
-      const newList = [...data, newUrl];
+      const newList = [newUrl, ...data];
       localStorage.setItem("SHORTENED_LINKS", JSON.stringify(newList));
       setData(newList);
     } catch (error) {
@@ -32,25 +32,12 @@ export function Shortener() {
 
     try {
       const result = await shortenUrl(url);
-      handleData(result);
+      handleSave(result);
     } catch (error) {
       console.error(error);
       setError(error.message);
     } finally {
       setLoading(false);
-    }
-  }
-
-  function handleLoad() {
-    try {
-      const raw = localStorage.getItem("SHORTENED_LINKS");
-      if (!raw) return;
-
-      const loadedList = JSON.parse(raw); 
-
-      if (loadedList) setData(loadedList);
-    } catch (error) {
-      console.error("Failed to load from localStorage:", error);
     }
   }
 
@@ -65,7 +52,15 @@ export function Shortener() {
   }
 
   useEffect(() => {
-    handleLoad();
+    try {
+      const raw = localStorage.getItem("SHORTENED_LINKS");
+      if (!raw) return;
+
+      const loadedList = JSON.parse(raw);
+      if (loadedList) setData(loadedList);
+    } catch (error) {
+      console.error("Failed to load from localStorage:", error);
+    }
   }, []);
 
   const inputError = error ? 'text-red-brand outline-2 outline-red-brand' : 'text-very-dark-violet';
