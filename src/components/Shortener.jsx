@@ -114,7 +114,7 @@ function UrlDiv({ data, handleDelete }) {
 
   async function handleCopy() {
     try {
-      await navigator.clipboard.writeText(data.shortUrl);
+      await navigator.clipboard.writeText(`https://${data.shortUrl}`);
       setCopied((state) => !state);
       setTimeout(() => setCopied(false), 3000);
     } catch (err) {
